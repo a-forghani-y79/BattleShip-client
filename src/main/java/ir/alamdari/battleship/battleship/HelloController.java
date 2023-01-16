@@ -2,7 +2,10 @@ package ir.alamdari.battleship.battleship;
 
 import ir.alamdari.battleship.battleship.model.Ship;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -10,12 +13,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class HelloController {
 
+    @FXML
+    public Button btnNext;
     private Ship selectedShip;
 
     private int [][]myArea;
@@ -53,6 +61,26 @@ public class HelloController {
         ships.add(new Ship(3,2, "kashti 1","#FF00FF"));
         ships.add(new Ship(4,1, "ghayegh 1","#FF00FF"));
         ships.add(new Ship(5, 1, "ghayegh 2","#FF00FF"));
+
+        btnNext.setOnMouseClicked(event -> {
+            Parent root;
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource(
+                        "serverConnector.fxml"));
+                root = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setTitle("My New Stage Title");
+                stage.setScene(new Scene(root));
+                stage.show();
+                // Hide this current window (if this is what you want)
+                ((Node)(event.getSource())).getScene().getWindow().hide();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
 
 
         listView.setCellFactory(param -> new ListCell<>(){
