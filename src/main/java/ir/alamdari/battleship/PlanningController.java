@@ -6,8 +6,15 @@ import ir.alamdari.battleship.model.Ship;
 import ir.alamdari.battleship.model.comminucations.Request;
 import ir.alamdari.battleship.model.comminucations.Response;
 import ir.alamdari.battleship.model.comminucations.Type;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -15,6 +22,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,11 +33,14 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PlanningController {
 
     private String ip;
     private int port;
+    private Timeline timeline;
 
     @FXML
     public Button btnNext;
@@ -103,6 +115,19 @@ public class PlanningController {
 
         btnNext.setOnMouseClicked(event -> {
 
+            if (join()){
+                btnNext.setDisable(true);
+                btnNext.setText("Waiting for Opponent ...");
+
+                timeline = new Timeline(new KeyFrame(Duration.seconds(1),
+                        event1 -> {
+                    if (isOpponentReady()){
+                        letsFight();
+                    }
+                }));
+                timeline.setCycleCount(200);
+                timeline.play();
+            }
 
         });
 
@@ -180,5 +205,94 @@ public class PlanningController {
             System.out.println(exception.getMessage());
         }
         return ships;
+    }
+
+    private boolean join(){
+        boolean join = false;
+        SocketAddress socketAddress = new InetSocketAddress(ip, port);
+        Socket socket = new Socket();
+        // Timeout required - it's in milliseconds
+        int timeout = 500;
+        try {
+            socket.connect(socketAddress, timeout);
+            ObjectOutputStream oos =
+                    new ObjectOutputStream(socket.getOutputStream());
+
+            Request request = new Request();
+            request.setRequestType(Type.JOIN_REQUEST);
+            request.setData(myArea);
+            request.setFrom(new Player("player one"));
+
+            oos.writeObject(request);
+
+            ObjectInputStream objectInputStream =
+                    new ObjectInputStream(socket.getInputStream());
+
+            Response response = (Response) objectInputStream.readObject();
+
+            System.out.println("response.getMessage() = " + response.getMessage());
+            join = (boolean) response.getData();
+
+            socket.close();
+        } catch (IOException | ClassNotFoundException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return join;
+    }
+
+    private boolean isOpponentReady(){
+        boolean ready = false;
+        SocketAddress socketAddress = new InetSocketAddress(ip, port);
+        Socket socket = new Socket();
+        // Timeout required - it's in milliseconds
+        int timeout = 500;
+        try {
+            socket.connect(socketAddress, timeout);
+            ObjectOutputStream oos =
+                    new ObjectOutputStream(socket.getOutputStream());
+
+            Request request = new Request();
+            request.setRequestType(Type.OPPONENT_JOIN_CHECK);
+            request.setData(null);
+            request.setFrom(new Player("player one"));
+
+            oos.writeObject(request);
+
+            ObjectInputStream objectInputStream =
+                    new ObjectInputStream(socket.getInputStream());
+
+            Response response = (Response) objectInputStream.readObject();
+
+            System.out.println("response.getMessage() = " + response.getMessage());
+            ready = (boolean) response.getData();
+
+            socket.close();
+        } catch (IOException | ClassNotFoundException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return ready;
+    }
+
+    private void letsFight(){
+
+
+        Parent root;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource(
+                    "battle.fxml"));
+            root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Battle");
+            stage.setScene(new Scene(root));
+            timeline.stop();
+
+            stage.show();
+            // Hide this current window (if this is what you want)
+            gridPane.getScene().getWindow().hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
