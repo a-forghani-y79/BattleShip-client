@@ -1,4 +1,4 @@
-package ir.alamdari.battleship.battleship;
+package ir.alamdari.battleship;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

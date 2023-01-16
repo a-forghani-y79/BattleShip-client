@@ -1,4 +1,4 @@
-package ir.alamdari.battleship.battleship.model;
+package ir.alamdari.battleship.model;
 
 import java.io.Serializable;
 import java.util.Objects;

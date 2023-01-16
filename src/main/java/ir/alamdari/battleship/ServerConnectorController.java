@@ -1,5 +1,9 @@
-package ir.alamdari.battleship.battleship;
+package ir.alamdari.battleship;
 
+import ir.alamdari.battleship.model.Player;
+import ir.alamdari.battleship.model.comminucations.Request;
+import ir.alamdari.battleship.model.comminucations.Response;
+import ir.alamdari.battleship.model.comminucations.Type;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -9,6 +13,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -82,9 +88,27 @@ public class ServerConnectorController {
         int timeout = 500;
         try {
             socket.connect(socketAddress, timeout);
+            ObjectOutputStream oos =
+                    new ObjectOutputStream(socket.getOutputStream());
+
+            Request request = new Request();
+            request.setRequestType(Type.CONNECTION_CHECKING);
+            request.setData(null);
+            request.setFrom(new Player("player one"));
+
+            oos.writeObject(request);
+
+            ObjectInputStream objectInputStream =
+                    new ObjectInputStream(socket.getInputStream());
+
+            Response response = (Response) objectInputStream.readObject();
+
+            System.out.println("response.getMessage() = " + response.getMessage());
+            if (response.getData() != null)
+                isAlive = (boolean) response.getData();
+
             socket.close();
-            isAlive = true;
-        } catch (IOException exception) {
+        } catch (IOException | ClassNotFoundException exception) {
             System.out.println(exception.getMessage());
         }
         return isAlive;

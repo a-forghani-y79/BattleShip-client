@@ -10,7 +10,7 @@
 
 
 <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="427.0" prefWidth="412.0" spacing="16.0" xmlns="http://javafx.com/javafx/19"
-    xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.alamdari.battleship.battleship.ServerConnectorController">
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.alamdari.battleship.ServerConnectorController">
    <padding>
       <Insets top="14.0" />
    </padding>

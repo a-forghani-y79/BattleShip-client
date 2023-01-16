@@ -1,6 +1,9 @@
-package ir.alamdari.battleship.battleship.model;
+package ir.alamdari.battleship.model;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
+    public static final long serialVersionUID = 98765678L;
     private String name;
 
     public Player(String name) {

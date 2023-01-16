@@ -1,6 +1,6 @@
-package ir.alamdari.battleship.battleship;
+package ir.alamdari.battleship;
 
-import ir.alamdari.battleship.battleship.model.Ship;
+import ir.alamdari.battleship.model.Ship;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
