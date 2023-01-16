@@ -1,5 +1,6 @@
 package ir.alamdari.battleship;
 
+import ir.alamdari.battleship.dataHolder.DataHolder;
 import ir.alamdari.battleship.model.Player;
 import ir.alamdari.battleship.model.comminucations.Request;
 import ir.alamdari.battleship.model.comminucations.Response;
@@ -7,10 +8,15 @@ import ir.alamdari.battleship.model.comminucations.Type;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,6 +24,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.HashMap;
 
 public class ServerConnectorController {
     @FXML
@@ -41,7 +48,11 @@ public class ServerConnectorController {
         btnCheck.setOnMouseClicked(btnCheckOnClick());
         textPort.setFocusTraversable(false
         );
+        textPort.textProperty().addListener(event -> btnGo.setDisable(true));
+        textIp.textProperty().addListener(event -> btnGo.setDisable(true));
         Platform.runLater(() -> btnCheck.requestFocus());
+
+        btnGo.setOnMouseClicked(btnGoOnClick());
 
 
     }
@@ -75,6 +86,34 @@ public class ServerConnectorController {
                 btnGo.setDisable(false);
             } else {
                 textStatus.setText("Server is not Reachable !");
+            }
+        };
+    }
+
+    private EventHandler<MouseEvent> btnGoOnClick() {
+        return event -> {
+            HashMap<String, String> data = new HashMap<>();
+            data.put("ip", textIp.getText());
+            data.put("port", textPort.getText());
+            DataHolder.getInstance().setData(data);
+
+
+            Parent root;
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource(
+                        "planning.fxml"));
+                root = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setTitle("My New Stage Title");
+                stage.setScene(new Scene(root));
+
+
+                stage.show();
+                // Hide this current window (if this is what you want)
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         };
     }

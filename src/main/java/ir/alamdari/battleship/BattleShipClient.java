@@ -7,13 +7,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class BattleShipClient extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader =
-                new FXMLLoader(HelloApplication.class.getResource("initPlan.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1080, 728);
-        stage.setTitle("Initialize My Plan!");
+                new FXMLLoader(BattleShipClient.class.getResource(
+                        "serverConnector.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Battle Ship Game");
         stage.setScene(scene);
         stage.show();
     }

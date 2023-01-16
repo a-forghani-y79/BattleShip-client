@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                ir.alamdari.battleship/ir.alamdari.battleship.HelloApplication
+                                ir.alamdari.battleship/ir.alamdari.battleship.BattleShipClient
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
