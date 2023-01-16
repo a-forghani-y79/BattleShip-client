@@ -37,6 +37,8 @@ public class ServerConnectorController {
     public Text textStatus;
     @FXML
     public Button btnGo;
+    @FXML
+    public TextField textName;
 
     @FXML
     public void initialize() {
@@ -50,6 +52,7 @@ public class ServerConnectorController {
         );
         textPort.textProperty().addListener(event -> btnGo.setDisable(true));
         textIp.textProperty().addListener(event -> btnGo.setDisable(true));
+        textName.textProperty().addListener(event -> btnGo.setDisable(true));
         Platform.runLater(() -> btnCheck.requestFocus());
 
         btnGo.setOnMouseClicked(btnGoOnClick());
@@ -80,6 +83,14 @@ public class ServerConnectorController {
                 e.printStackTrace();
                 return;
             }
+
+            String name = textName.getText();
+            if (name == null || name.length() == 0 || name.isBlank()) {
+                textStatus.setText("Enter Your Name PLZ");
+                System.out.println("Name validation problem");
+                return;
+            }
+
             if (isSocketAlive(ip, portInt)) {
                 textStatus.setVisible(true);
                 textStatus.setText("Server is Ready !");
@@ -95,6 +106,7 @@ public class ServerConnectorController {
             HashMap<String, String> data = new HashMap<>();
             data.put("ip", textIp.getText());
             data.put("port", textPort.getText());
+            data.put("name",textName.getText());
             DataHolder.getInstance().setData(data);
 
 
