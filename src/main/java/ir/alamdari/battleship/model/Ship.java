@@ -65,11 +65,11 @@ public class Ship implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ship ship = (Ship) o;
-        return id == ship.id && length == ship.length && Objects.equals(name, ship.name) && Objects.equals(color, ship.color);
+        return length == ship.length && name.equals(ship.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, length, name, color);
+        return Objects.hash(length, name);
     }
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Player implements Serializable {
     public static final long serialVersionUID = 98765678L;
+
     private String name;
 
     public Player(String name) {
@@ -16,5 +17,12 @@ public class Player implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package ir.alamdari.battleship.model.comminucations;
 
+
 import ir.alamdari.battleship.model.Player;
 
 import java.io.Serializable;
@@ -52,5 +53,15 @@ public class Response implements Serializable {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "to=" + to.toString() +
+                ", responseType=" + responseType +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
     }
 }
