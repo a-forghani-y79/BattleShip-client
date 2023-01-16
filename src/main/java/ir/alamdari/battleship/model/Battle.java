@@ -1,6 +1,7 @@
 package ir.alamdari.battleship.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 public class Battle implements Serializable {
@@ -60,5 +61,16 @@ public class Battle implements Serializable {
 
     public void setPlayerTwoArea(int[][] playerTwoArea) {
         this.playerTwoArea = playerTwoArea;
+    }
+
+    @Override
+    public String toString() {
+        return "Battle{" +
+                "playerOne=" + playerOne.toString() +
+                ", playerTwo=" + playerTwo.toString() +
+                ", ships=" + ships +
+                ", playerOneArea=" + Arrays.toString(playerOneArea) +
+                ", playerTwoArea=" + Arrays.toString(playerTwoArea) +
+                '}';
     }
 }

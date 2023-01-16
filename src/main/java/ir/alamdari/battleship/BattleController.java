@@ -18,18 +18,20 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BattleController {
 
     @FXML
-    public Text playerOneText;
+    public Text myNameText;
     @FXML
-    public Text playerTwoText;
+    public Text opponentNameText;
     @FXML
     public GridPane myGrid;
     @FXML
@@ -54,13 +56,41 @@ public class BattleController {
         port = Integer.parseInt(DataHolder.getInstance().getData().get("port"));
         ship = requestAndGetShips();
         playerName = DataHolder.getInstance().getData().get("name");
+        winnerText.setText("");
 
 
-        Battle battle
-                = getLastStateOfBattle();
+        Battle battle = getLastStateOfBattle();
+
+
+        if (battle.getPlayerOne().getName().equals(playerName)) {
+            myNameText.setText(battle.getPlayerOne().getName());
+            opponentNameText.setText(battle.getPlayerTwo().getName());
+        } else {
+            opponentNameText.setText(battle.getPlayerOne().getName());
+            myNameText.setText(battle.getPlayerTwo().getName());
+        }
+
+        myGrid.getColumnConstraints().forEach(columnConstraints -> columnConstraints.setPrefWidth(40));
+        myGrid.getRowConstraints().forEach(rowConstraints -> rowConstraints.setPrefHeight(40));
+        myGrid.setPrefHeight(400);
+        myGrid.setPrefWidth(400);
+
+        opponentGrid.getColumnConstraints().forEach(columnConstraints -> columnConstraints.setPrefWidth(40));
+        opponentGrid.getRowConstraints().forEach(rowConstraints -> rowConstraints.setPrefHeight(40));
+        opponentGrid.setPrefHeight(400);
+        opponentGrid.setPrefWidth(400);
+
+//        System.out.println("playerName = " + playerName);
+//        System.out.println("battle = " + battle.toString());
+//
+//        System.out.println("Player One");
+//        printArray(battle.getPlayerOneArea());
+//
+//        System.out.println("Player two");
+//        printArray(battle.getPlayerTwoArea());
+
 
         initAreas(battle);
-
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1),
                 event1 -> {
@@ -70,26 +100,34 @@ public class BattleController {
                     } else {
                         opponentGrid.setDisable(true);
                     }
-
                     winner = getWinner();
 
                     if (winner != null) {
                         endGame(winner);
                     }
-
-                    timeline.setCycleCount(timeline.getCycleCount() + 1);
+                    timeline.setCycleCount(1000);
                 }));
-        int cycleCount = 10;
+        int cycleCount = 10000;
         timeline.setCycleCount(cycleCount);
         timeline.play();
 
     }
 
+    private void printArray(int[][] array) {
+        System.out.println("-------------------");
+        for (int[] ints : array) {
+            for (int anInt : ints) {
+                System.out.print(anInt + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("-------------------");
+    }
+
     private void endGame(Player winner) {
         if (winner.getName().equals(playerName))
             winnerText.setText("You Win !!!");
-        else
-            winnerText.setText("You Lose :(");
+        else winnerText.setText("You Lose :(");
     }
 
     private void updateAreas(Battle battle) {
@@ -108,8 +146,7 @@ public class BattleController {
         int timeout = 500;
         try {
             socket.connect(socketAddress, timeout);
-            ObjectOutputStream oos =
-                    new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
             Request request = new Request();
             request.setRequestType(Type.IS_MY_TURN);
@@ -117,12 +154,10 @@ public class BattleController {
 
             oos.writeObject(request);
 
-            ObjectInputStream objectInputStream =
-                    new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             turn = (boolean) response.getData();
 
             socket.close();
@@ -141,8 +176,7 @@ public class BattleController {
         int timeout = 500;
         try {
             socket.connect(socketAddress, timeout);
-            ObjectOutputStream oos =
-                    new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
             Request request = new Request();
             request.setRequestType(Type.SHOOT);
@@ -151,12 +185,9 @@ public class BattleController {
 
             oos.writeObject(request);
 
-            ObjectInputStream objectInputStream =
-                    new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
             Response response = (Response) objectInputStream.readObject();
-
-            System.out.println("response.getMessage() = " + response.getMessage());
 
             socket.close();
         } catch (IOException | ClassNotFoundException exception) {
@@ -173,8 +204,7 @@ public class BattleController {
         int timeout = 500;
         try {
             socket.connect(socketAddress, timeout);
-            ObjectOutputStream oos =
-                    new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
             Request request = new Request();
             request.setRequestType(Type.GET_WINNER);
@@ -183,12 +213,10 @@ public class BattleController {
 
             oos.writeObject(request);
 
-            ObjectInputStream objectInputStream =
-                    new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             winner = (Player) response.getData();
 
             socket.close();
@@ -206,24 +234,18 @@ public class BattleController {
                 for (int j = 0; j < 10; j++) {
 
                     if (playerName.equals(battle.getPlayerOne().getName())) {
-                        button = initButton(i, j,
-                                battle.getPlayerTwoArea()[i][j], true);
+                        button = initButton(i, j, battle.getPlayerOneArea()[i][j], false);
+                        myGrid.add(button, j, i);
+                        button = initButton(i, j, battle.getPlayerTwoArea()[i][j], true);
                         button.setOnMouseClicked(event -> onClickButton((Button) event.getSource()));
-                        opponentGrid.add(button, i, j);
-
-                        button = initButton(i, j,
-                                battle.getPlayerOneArea()[i][j], false);
-                        myGrid.add(button, i, j);
-                        //     area[i][j] = button;
-                    }else{
-                        button = initButton(i, j,
-                                battle.getPlayerOneArea()[i][j], true);
+                        opponentGrid.add(button, j, i);
+                    } else {
+                        button = initButton(i, j, battle.getPlayerTwoArea()[i][j], false);
+                        myGrid.add(button, j, i);
+                        button = initButton(i, j, battle.getPlayerOneArea()[i][j], true);
                         button.setOnMouseClicked(event -> onClickButton((Button) event.getSource()));
-                        opponentGrid.add(button, i, j);
+                        opponentGrid.add(button, j, i);
 
-                        button = initButton(i, j,
-                                battle.getPlayerTwoArea()[i][j], false);
-                        myGrid.add(button, i, j);
                     }
                 }
             }
@@ -235,20 +257,26 @@ public class BattleController {
         //type 0 for water | -1 for destroyed ship cell
         Button button = new Button("");
         button.setId("btn" + i + j);
-        button.setPrefHeight(50);
-        button.setPrefWidth(50);
+        button.setFocusTraversable(false);
+        button.setPrefHeight(40);
+        button.setPrefWidth(40);
         if (isOpponent) {
             if (type == 0) {
-                button.setStyle("-fx-background-color: blue");
+                //  button.setStyle("-fx-background-color: blue");
             } else if (type == -1) {
-                button.setStyle("-fx-background-color: #ff4800");
+                button.setStyle("-fx-background-color: #a80202");
+            } else if (type== -2) {
+                button.setStyle("-fx-background-color: #595959");
             }
         } else {
             if (type == 0) {
-                button.setStyle("-fx-background-color: blue");
+                button.setStyle("-fx-background-color: rgba(0,149,255,0.34)");
             } else if (type == -1) {
-                button.setStyle("-fx-background-color: #ff4800");
-            } else {
+                button.setStyle("-fx-background-color: rgba(180,70,70,0.38)");
+            }else if (type== -2) {
+                button.setStyle("-fx-background-color: #595959");
+            }
+            else {
                 button.setStyle("-fx-background-color: " + getShipColorForId(type));
             }
             button.setDisable(true);
@@ -259,11 +287,11 @@ public class BattleController {
     }
 
     private String getShipColorForId(int i) {
+        String color = "#FAFAFA";
         for (Ship s : ship) {
-            if (s.getId() == i)
-                return s.getColor();
+            if (s.getId() == i) color = s.getColor();
         }
-        return "#FAFAFA";
+        return color;
     }
 
     private List<Ship> requestAndGetShips() {
@@ -274,8 +302,7 @@ public class BattleController {
         int timeout = 500;
         try {
             socket.connect(socketAddress, timeout);
-            ObjectOutputStream oos =
-                    new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
             Request request = new Request();
             request.setRequestType(Type.GET_SHIPS);
@@ -284,12 +311,10 @@ public class BattleController {
 
             oos.writeObject(request);
 
-            ObjectInputStream objectInputStream =
-                    new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             ships = (List<Ship>) response.getData();
 
             socket.close();
@@ -308,8 +333,7 @@ public class BattleController {
         int timeout = 500;
         try {
             socket.connect(socketAddress, timeout);
-            ObjectOutputStream oos =
-                    new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
             Request request = new Request();
             request.setRequestType(Type.GET_LAST_STATE_BATTLE);
@@ -318,12 +342,10 @@ public class BattleController {
 
             oos.writeObject(request);
 
-            ObjectInputStream objectInputStream =
-                    new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             battle = (Battle) response.getData();
 
             socket.close();

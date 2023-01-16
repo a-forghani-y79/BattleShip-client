@@ -19,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -34,6 +35,8 @@ import java.util.List;
 
 public class PlanningController {
 
+    @FXML
+    public Text welcomeText ;
     private String ip;
     private int port;
     private Timeline timeline;
@@ -58,13 +61,14 @@ public class PlanningController {
         ip = DataHolder.getInstance().getData().get("ip");
         port = Integer.parseInt(DataHolder.getInstance().getData().get("port"));
         playerName = DataHolder.getInstance().getData().get("name");
+        welcomeText.setText("Welcome "+playerName);
         myArea = new int[10][10];
-        printArray(myArea);
+//        printArray(myArea);
 
-        gridPane.getColumnConstraints().forEach(columnConstraints -> columnConstraints.setPrefWidth(50));
-        gridPane.getRowConstraints().forEach(rowConstraints -> rowConstraints.setPrefHeight(50));
-        gridPane.setPrefHeight(500);
-        gridPane.setPrefWidth(500);
+        gridPane.getColumnConstraints().forEach(columnConstraints -> columnConstraints.setPrefWidth(40));
+        gridPane.getRowConstraints().forEach(rowConstraints -> rowConstraints.setPrefHeight(40));
+        gridPane.setPrefHeight(400);
+        gridPane.setPrefWidth(400);
 //        Button[][] area = new Button[10][10];
         Button button;
         for (int i = 0; i < 10; i++) {
@@ -146,7 +150,7 @@ public class PlanningController {
                     }
                 }
             }
-            printArray(myArea);
+//            printArray(myArea);
 
             listView.getItems().remove(selectedShip);
             selectedShip = null;
@@ -196,7 +200,6 @@ public class PlanningController {
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             ships = (List<Ship>) response.getData();
 
             socket.close();
@@ -229,7 +232,6 @@ public class PlanningController {
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             join = (boolean) response.getData();
 
             socket.close();
@@ -262,7 +264,6 @@ public class PlanningController {
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             ready = (boolean) response.getData();
 
             socket.close();

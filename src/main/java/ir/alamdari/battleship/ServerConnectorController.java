@@ -145,7 +145,7 @@ public class ServerConnectorController {
             Request request = new Request();
             request.setRequestType(Type.CONNECTION_CHECKING);
             request.setData(null);
-            request.setFrom(new Player("player one"));
+            request.setFrom(new Player(textName.getText()));
 
             oos.writeObject(request);
 
@@ -154,7 +154,6 @@ public class ServerConnectorController {
 
             Response response = (Response) objectInputStream.readObject();
 
-            System.out.println("response.getMessage() = " + response.getMessage());
             if (response.getData() != null)
                 isAlive = (boolean) response.getData();
 
