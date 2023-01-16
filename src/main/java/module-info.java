@@ -6,5 +6,6 @@ module ir.alamdari.battleship.battleship {
     opens ir.alamdari.battleship.battleship to javafx.fxml;
     exports ir.alamdari.battleship.battleship;
     exports ir.alamdari.battleship.battleship.model;
+    exports ir.alamdari.battleship.battleship.model.comminucations;
 
 }
