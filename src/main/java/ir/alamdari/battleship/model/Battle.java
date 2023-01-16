@@ -4,32 +4,38 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Battle implements Serializable {
-    private String playerOneName;
-    private String playerTwoName;
+    public static final long serialVersionUID = 45634327289L;
+
+    private Player playerOne;
+    private Player playerTwo;
     private List<Ship> ships;
-    private int[][] area;
+    private int[][] playerOneArea;
+    private int[][] playerTwoArea;
 
-    public Battle(String playerOneName, String playerTwoName, List<Ship> ships, int[][] area) {
-        this.playerOneName = playerOneName;
-        this.playerTwoName = playerTwoName;
+    public Battle(Player playerOne, Player playerTwo, List<Ship> ships, int[][] playerOneArea, int[][] playerTwoArea) {
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
         this.ships = ships;
-        this.area = area;
+        this.playerOneArea = playerOneArea;
+        this.playerTwoArea = playerTwoArea;
     }
 
-    public String getPlayerOneName() {
-        return playerOneName;
+    public Battle() {
+    }
+    public Player getPlayerOne() {
+        return playerOne;
     }
 
-    public void setPlayerOneName(String playerOneName) {
-        this.playerOneName = playerOneName;
+    public void setPlayerOne(Player playerOne) {
+        this.playerOne = playerOne;
     }
 
-    public String getPlayerTwoName() {
-        return playerTwoName;
+    public Player getPlayerTwo() {
+        return playerTwo;
     }
 
-    public void setPlayerTwoName(String playerTwoName) {
-        this.playerTwoName = playerTwoName;
+    public void setPlayerTwo(Player playerTwo) {
+        this.playerTwo = playerTwo;
     }
 
     public List<Ship> getShips() {
@@ -40,11 +46,19 @@ public class Battle implements Serializable {
         this.ships = ships;
     }
 
-    public int[][] getArea() {
-        return area;
+    public int[][] getPlayerOneArea() {
+        return playerOneArea;
     }
 
-    public void setArea(int[][] area) {
-        this.area = area;
+    public void setPlayerOneArea(int[][] playerOneArea) {
+        this.playerOneArea = playerOneArea;
+    }
+
+    public int[][] getPlayerTwoArea() {
+        return playerTwoArea;
+    }
+
+    public void setPlayerTwoArea(int[][] playerTwoArea) {
+        this.playerTwoArea = playerTwoArea;
     }
 }

@@ -8,8 +8,6 @@ import ir.alamdari.battleship.model.comminucations.Response;
 import ir.alamdari.battleship.model.comminucations.Type;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -33,14 +31,14 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class PlanningController {
 
     private String ip;
     private int port;
     private Timeline timeline;
+
+    private String playerName;
 
     @FXML
     public Button btnNext;
@@ -59,6 +57,7 @@ public class PlanningController {
 
         ip = DataHolder.getInstance().getData().get("ip");
         port = Integer.parseInt(DataHolder.getInstance().getData().get("port"));
+        playerName = DataHolder.getInstance().getData().get("name");
         myArea = new int[10][10];
         printArray(myArea);
 
@@ -188,7 +187,7 @@ public class PlanningController {
             Request request = new Request();
             request.setRequestType(Type.GET_SHIPS);
             request.setData(null);
-            request.setFrom(new Player("player one"));
+            request.setFrom(new Player(playerName));
 
             oos.writeObject(request);
 
@@ -221,7 +220,7 @@ public class PlanningController {
             Request request = new Request();
             request.setRequestType(Type.JOIN_REQUEST);
             request.setData(myArea);
-            request.setFrom(new Player("player one"));
+            request.setFrom(new Player(playerName));
 
             oos.writeObject(request);
 
@@ -254,7 +253,7 @@ public class PlanningController {
             Request request = new Request();
             request.setRequestType(Type.OPPONENT_JOIN_CHECK);
             request.setData(null);
-            request.setFrom(new Player("player one"));
+            request.setFrom(new Player(playerName));
 
             oos.writeObject(request);
 
