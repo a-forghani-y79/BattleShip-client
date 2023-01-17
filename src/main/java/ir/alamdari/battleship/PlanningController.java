@@ -19,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -103,12 +104,14 @@ public class PlanningController {
                     //setTextFill(Color.web(item.getColor()));
                     setTextAlignment(TextAlignment.CENTER);
                     setGraphic(new Circle(10, Paint.valueOf(item.getColor())));
+                    setFont(new Font("CoolveticaRg-Regular",12));
                 } else {
                     setText(null);
                     setGraphic(null);
                 }
 
             }
+
         });
         listView.getItems().addAll(ships);
 

@@ -23,17 +23,17 @@
             <children>
                <Text fx:id="myNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Player One">
                   <font>
-                     <Font size="24.0" />
+                     <Font name="CoolveticaRg-Regular" size="24.0" />
                   </font>
                </Text>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="VS">
                   <font>
-                     <Font name="System Italic" size="21.0" />
+                     <Font name="CoolveticaRg-Regular" size="21.0" />
                   </font>
                </Text>
                <Text fx:id="opponentNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Player Two">
                   <font>
-                     <Font size="24.0" />
+                     <Font name="CoolveticaRg-Regular" size="24.0" />
                   </font>
                </Text>
             </children>
@@ -96,7 +96,7 @@
          </HBox>
          <Text fx:id="winnerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Player One Wins!">
             <font>
-               <Font name="System Italic" size="34.0" />
+               <Font name="CoolveticaRg-Regular" size="34.0" />
             </font>
          </Text>
       </children>

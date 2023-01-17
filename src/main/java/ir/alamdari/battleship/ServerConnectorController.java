@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -53,6 +54,7 @@ public class ServerConnectorController {
         textPort.textProperty().addListener(event -> btnGo.setDisable(true));
         textIp.textProperty().addListener(event -> btnGo.setDisable(true));
         textName.textProperty().addListener(event -> btnGo.setDisable(true));
+
         Platform.runLater(() -> btnCheck.requestFocus());
 
         btnGo.setOnMouseClicked(btnGoOnClick());

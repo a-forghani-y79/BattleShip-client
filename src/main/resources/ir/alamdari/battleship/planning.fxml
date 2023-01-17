@@ -40,23 +40,22 @@
    <ListView fx:id="listView" layoutX="24.0" layoutY="153.0" prefHeight="200.0" prefWidth="133.0" />
    <Button fx:id="btnNext" alignment="CENTER" contentDisplay="RIGHT" layoutX="484.0" layoutY="520.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefWidth="82.0" text="Next" textAlignment="RIGHT">
       <font>
-         <Font size="16.0" />
+         <Font name="CoolveticaRg-Regular" size="16.0" />
       </font>
    </Button>
    <Text layoutX="240.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Ship and Place in Plan">
       <font>
-         <Font size="20.0" />
+         <Font name="CoolveticaRg-Regular" size="20.0" />
       </font>
    </Text>
    <Text layoutX="57.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ship List">
       <font>
-         <Font size="18.0" />
+         <Font name="CoolveticaRg-Regular" size="18.0" />
       </font>
    </Text>
-   <Text fx:id="welcomeText" layoutX="35.0" layoutY="47.0"
-       strokeType="OUTSIDE" strokeWidth="0.0" text="Wellcom Ali" textAlignment="CENTER" wrappingWidth="519.09375">
+   <Text fx:id="welcomeText" layoutX="35.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wellcom Ali" textAlignment="CENTER" wrappingWidth="519.09375">
       <font>
-         <Font size="24.0" />
+         <Font name="CoolveticaRg-Regular" size="24.0" />
       </font>
    </Text>
    <padding>
